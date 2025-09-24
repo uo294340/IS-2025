@@ -4,9 +4,9 @@ import sys;
 if len(sys.argv) > 2:
     print("Uso: python udp_servidor.py <puerto>")
     sys.exit(1)
-    elif len(sys.argv) == 1:
+elif len(sys.argv) == 1:
     puerto = 9999;  # Puerto por defecto
-    else:
+else:
     puerto = int(sys.argv[1])
 
 # Crear el socket UDP
