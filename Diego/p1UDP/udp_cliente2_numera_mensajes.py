@@ -25,6 +25,8 @@ while True:
 		break
 	mensaje = f"{numero}: {texto}"
 	sock.sendto(mensaje.encode(), (server_ip, server_port))
+	datos= sock.recvfrom(1024)
+	print((f"Recibido {datos}"))
 	numero += 1
 
 sock.close()
