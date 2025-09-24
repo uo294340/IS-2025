@@ -25,6 +25,10 @@ while True:
     if mensaje == "FIN":
         break
     cliente.sendto(mensaje.encode(), (host, puerto))
+
+#esperar respuesta del servidor
+respuesta, _ = cliente.recvfrom(1024)
+print(f"Respuesta del servidor: {respuesta.decode()}")
     
 
 cliente.close()
