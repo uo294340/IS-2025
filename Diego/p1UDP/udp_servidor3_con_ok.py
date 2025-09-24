@@ -25,3 +25,4 @@ while True:
         servidor.sendto(b"OK",direccion)
     else:
      print("Simulando paquete perdido")
+     servidor.sendto(b"NO OK",direccion)
