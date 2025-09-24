@@ -10,6 +10,7 @@ else:
     puerto=int(sys.argv[1])
 
 #socket udp
+
 servidor=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 servidor.bind(('localhost',puerto))
 print(f"Servidor UDP escuchando en el puerto {puerto}")
