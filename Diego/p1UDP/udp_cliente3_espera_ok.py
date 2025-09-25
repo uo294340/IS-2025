@@ -15,7 +15,7 @@ else:
 
 # Crear socket UDP
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+sock.settimeout(3) #espera 3 segundos
 
 print(f"Escribe lo que quieras pero FIN AL FINAL")
 numero = 1
@@ -25,8 +25,12 @@ while True:
 		break
 	mensaje = f"{numero}: {texto}"
 	sock.sendto(mensaje.encode(), (server_ip, server_port))
-	datos= sock.recvfrom(1024)
-	print((f"Recibido {datos}"))
+
+	try:
+		datos,_= sock.recvfrom(1024)
+		print((f"Recibido {datos}"))
+	except socket.timeout:
+		print("No se recibió confirmación del servidor ")
 	numero += 1
 
 sock.close()
