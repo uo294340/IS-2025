@@ -22,5 +22,8 @@ while True:
 	if mensaje == "FIN":
 		break
 	sock.sendto(mensaje.encode(), (server_ip, server_port))
+	mensaje,_=sock.recvfrom(1024)  # Esperar respuesta del servidor
+	print(f"Respuesta del servidor: {mensaje}")
+	
 
 sock.close()
