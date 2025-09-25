@@ -15,7 +15,7 @@ else:
 
 # Crear socket UDP
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.settimeout(3) #espera 3 segundos
+sock.settimeout(0.1)
 
 print(f"Escribe lo que quieras pero FIN AL FINAL")
 numero = 1
