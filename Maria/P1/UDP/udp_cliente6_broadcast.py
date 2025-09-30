@@ -1,8 +1,10 @@
 import socket
 import sys
 
-puerto = 12345
-BROADCAST_IP = '192.168.0.255'  # ip: 192.168.0.28 mask= 255.255.255.0 bradcast_ip:192.168.0.255
+"""puerto = 12345
+BROADCAST_IP = '192.168.0.255'  # ip: 192.168.0.28 mask= 255.255.255.0 bradcast_ip:192.168.0.255"""
+BROADCAST_IP = sys.argv[1] if len(sys.argv) > 1 else '192.168.0.255'
+puerto = int(sys.argv[2]) if len(sys.argv) > 2 else 12345
 
 
 cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
