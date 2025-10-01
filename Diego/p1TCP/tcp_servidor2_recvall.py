@@ -8,6 +8,7 @@ def recvall(sock,length):
         more=sock.recv(length-len(datos))
         if not more:
             raise EOFError("Se cerro la conexion antes de recibir todos los datos")
+        datos+=more
     return datos
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
 # Podríamos haber omitido los parámetros, pues por defecto `socket()` en python
