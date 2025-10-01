@@ -13,7 +13,7 @@ else:
 #socket udp
 
 servidor=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-servidor.bind(('localhost',puerto))
+servidor.bind(('',puerto))
 print(f"Servidor UDP escuchando en el puerto {puerto}")
 
 while True:
