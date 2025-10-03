@@ -1,6 +1,16 @@
 import socket
 import time
 
+def recibe_mensaje(sock):
+    buffer = []
+    while True:
+        byte = sock.recv(1)
+        if not byte:
+            return b""
+        buffer.append(byte)
+        if len(buffer) >= 2 and buffer[-2:] == [b'\r', b'\n']:
+            return b"".join(buffer)
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("", 9999))
@@ -14,7 +24,7 @@ while True:
     print("Cliente conectado:", origen)
 
     while True:
-        mensaje = sd.recv(80)
+        mensaje = recibe_mensaje(sd)
         if not mensaje:  # cliente cerró
             break
 
