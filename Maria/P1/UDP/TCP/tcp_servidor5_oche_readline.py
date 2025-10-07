@@ -28,11 +28,10 @@ while True:
         mensaje = f.readline()
         if not mensaje:  # cliente cerró
             break
-
-        
+        print("Recibido:", mensaje.strip())
         linea = mensaje.strip()   # quitar \r\n
-        linea = linea[::-1]    # invertir
-        sd.sendall((linea + "\r\n").encode("utf8"))
+        respuesta = linea[::-1]    # invertir
+        sd.sendall((respuesta + "\r\n").encode("utf8"))
 
     sd.close()
     print("Cliente desconectado:", origen)
