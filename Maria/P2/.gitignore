@@ -1,0 +1,7 @@
+# Ignorar la carpeta donde MariaDB guarda los datos
+basedatos/
+
+# (Opcional) Ignorar archivos temporales del sistema
+*.log
+__pycache__/
+*.pyc
