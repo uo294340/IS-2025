@@ -6,7 +6,7 @@ user = input("Enter your remote account: ")
 password = getpass.getpass()
 
 tn = telnetlib.Telnet(HOST)
-tn.set_debuglevel(1)
+#tn.set_debuglevel(1)
 tn.read_until(b"login: ")
 tn.write(user.encode('utf-8') + b"\n")
 if password:

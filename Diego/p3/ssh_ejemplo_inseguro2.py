@@ -2,7 +2,7 @@ import paramiko
 import time
 import getpass
 client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.set_missing_host_key_policy(paramiko.WarningPolicy())
 
 password = getpass.getpass("Contraseña: ")
 client.connect('localhost', username='uo293690', password=password)

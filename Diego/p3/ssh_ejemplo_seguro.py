@@ -1,8 +1,11 @@
 import paramiko
 import time
+import base64
 import getpass
 client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+key = paramiko.Ed25519Key(data=base64.b64decode(b' AAAAC3NzaC1lZDI1NTE5AAAAIJvKGXXnW3/OrndT+MSoKlRYdJvJkRIrSYJbgtps0kuhroot@is-14'))
+client.get_host_keys().add('localhost', 'ssh-ed25519', key)
 
 password = getpass.getpass("Contraseña: ")
 client.connect('localhost', username='uo293690', password=password)
