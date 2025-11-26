@@ -1,6 +1,8 @@
 package es.uniovi.converter
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,5 +18,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+    }
+    fun onClickToDollars(view: View) {
+        Toast.makeText(this, "¡Me han pulsado!", Toast.LENGTH_SHORT).show()
+    }
+
+    // Se llama cuando el usuario pulsa el botón de dólares → euros
+    fun onClickToEuros(view: View) {
+        Toast.makeText(this, "¡Me han pulsado!", Toast.LENGTH_SHORT).show()
     }
 }
