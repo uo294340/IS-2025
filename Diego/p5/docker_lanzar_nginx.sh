@@ -1,5 +1,5 @@
 #!/bin/bash
-docker run --rm -d --network pruebas \
+docker run --rm -d \
     --name nginx \
     -p 80:80 -p 81:81 \
     -v $(pwd)/html:/usr/share/nginx/html \
