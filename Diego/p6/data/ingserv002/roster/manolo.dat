@@ -1,0 +1,25 @@
+return {
+	[false] = {
+		["version"] = 13;
+		["pending"] = {};
+	};
+	["pepito@jabbers.one"] = {
+		["ask"] = "subscribe";
+		["groups"] = {
+			["Buddies"] = true;
+		};
+		["subscription"] = "none";
+	};
+	["bot@ingserv002"] = {
+		["groups"] = {
+			["Buddies"] = true;
+		};
+		["subscription"] = "both";
+	};
+	["ramon@ingserv002"] = {
+		["groups"] = {
+			["Buddies"] = true;
+		};
+		["subscription"] = "both";
+	};
+};

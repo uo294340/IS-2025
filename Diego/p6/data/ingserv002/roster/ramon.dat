@@ -1,0 +1,12 @@
+return {
+	[false] = {
+		["version"] = 5;
+		["pending"] = {};
+	};
+	["manolo@ingserv002"] = {
+		["groups"] = {
+			["Buddies"] = true;
+		};
+		["subscription"] = "both";
+	};
+};
