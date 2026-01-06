@@ -16,14 +16,18 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import androidx.activity.viewModels
+
 
 class MainActivity : AppCompatActivity() {
     private var euroToDollar: Double = 1.16
     private lateinit var editTextEuros: EditText
     private lateinit var editTextDollars: EditText
 
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        //fetchExchangeRate()
+        fetchExchangeRate()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -47,13 +51,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickToDollars(view: View) {
-        convert(editTextEuros, editTextDollars, euroToDollar)
+        convert(editTextEuros, editTextDollars, viewModel.euroToDollar)
         Toast.makeText(this, "Conversión a dólares realizada", Toast.LENGTH_SHORT).show()
     }
 
     // Se llama cuando el usuario pulsa el botón de dólares → euros
     fun onClickToEuros(view: View) {
-        convert(editTextDollars, editTextEuros, 1 / euroToDollar)
+        convert(editTextDollars, editTextEuros, 1 / viewModel.euroToDollar)
         Toast.makeText(this, "Conversión a euros realizada", Toast.LENGTH_SHORT).show()
     }
 

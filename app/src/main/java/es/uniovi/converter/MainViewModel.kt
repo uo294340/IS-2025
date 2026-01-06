@@ -1,10 +1,13 @@
 package es.uniovi.converter
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 
 
-class MainViewModel {
+class MainViewModel : ViewModel() {
     // Ahora la tasa de cambio estará en el ViewModel en vez de en la Activity
     var euroToDollar: Double = 1.16
     var yaDescargado: Boolean = false  // Para evitar múltiples descargas
@@ -25,9 +28,28 @@ class MainViewModel {
         // la tasa de cambio pero ahora el scope es viewModelScope en vez de lifecycleScope
         // Este scope se cancela automáticamente cuando el ViewModel se destruye
         // lo que ocurre si el usuario cierra la app.
+
         viewModelScope.launch {
             // El contenido es igual que antes, solo que sin el Toast
             // y recuerda poner yaDescargado a true al finalizar
+            try {
+                val response = Models.RetrofitClient.api.convert("EUR", "USD", 1.0)
+                val exchangeRateResponse = response.body()
+
+                if (response.isSuccessful && exchangeRateResponse != null) {
+                    euroToDollar = exchangeRateResponse.rates.USD
+                    yaDescargado = true // Marcamos como descargado
+                    Log.d("MainViewModel", "Cambio actualizado: $euroToDollar")
+                } else {
+                    Log.e("MainViewModel", "Error al obtener el cambio: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Excepción al obtener el cambio", e)
+            }
         }
+            }
+        }
+
+
     }
 }
