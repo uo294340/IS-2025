@@ -2,7 +2,4 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-
 }
-implementation("org.osmdroid:osmdroid-android:6.1.13")
-implementation("androidx.preference:preference-ktx:1.2.1")
