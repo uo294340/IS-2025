@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+
 
 class MainViewModel : ViewModel() {
     private val _amigosList = MutableLiveData<List<Amigo>>()
@@ -14,6 +16,7 @@ class MainViewModel : ViewModel() {
 
     init {
         Log.d("MainViewModel", "MainViewModel created")
+        startPolling() // Empezamos el polling
     }
 
     fun getAmigosList() {
@@ -38,6 +41,15 @@ class MainViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Excepción al obtener amigos: ${e.message}")
+            }
+        }
+    }
+    private fun startPolling() {
+        viewModelScope.launch {
+            while (true) {
+                Log.d("Polling", "Timer disparado, pidiendo amigos...")
+                getAmigosList()
+                delay(5000)
             }
         }
     }

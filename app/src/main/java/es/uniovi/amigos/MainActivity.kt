@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         // 1. Cargar el layout
         setContentView(R.layout.activity_main)
 
-        viewModel.getAmigosList()
+        //viewModel.getAmigosList()
 
         // 2. Leer la configuración de la aplicación e inicializar mapa
         // Esta es una operación de E/S en disco, para no bloquear el hilo GUI lo lanzamos
@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun paintAmigosList(amigos: List<Amigo>) {
+        map?.overlays?.clear()
         for (amigo in amigos) {
             addMarker(amigo.lati, amigo.longi, amigo. name)
         }
