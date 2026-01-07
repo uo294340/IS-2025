@@ -43,6 +43,14 @@ class MainActivity : AppCompatActivity() {
             map?.setTileSource(TileSourceFactory.MAPNIK)
             centrarMapaEnEuropa()
         }
+
+        viewModel.amigosList.observe(this) { listaDeAmigos ->
+            // Este bloque de código se ejecutará automáticamente
+            // cada vez que el ViewModel llame a _amigosList.setValue()
+
+            // Por ahora, solo verificamos que funciona:
+            Log.d("MainActivity", "¡Observer notificado! Amigos: $listaDeAmigos")
+        }
     }
 
     override fun onResume() {
