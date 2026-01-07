@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             // Una vez cargada la configuración, inicializamos el mapa
             map = findViewById(R.id.map)
             map?.setTileSource(TileSourceFactory.MAPNIK)
+            centrarMapaEnEuropa()
         }
     }
 
@@ -44,5 +46,14 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         map?.onPause()
+    }
+
+    fun centrarMapaEnEuropa() {
+        // Esta función mueve el centro del mapa a Paris y ajusta el zoom
+        // para que se vea Europa
+        val mapController = map?.controller
+        mapController?.setZoom(5.5)
+        val startPoint = GeoPoint(48.8583, 2.2944)
+        mapController?.setCenter(startPoint)
     }
 }
