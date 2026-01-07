@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    private var amigosList: List<Model.Amigo>? = null // Por defecto es nula
+    private var amigosList: List<Amigo>? = null
 
     init {
         Log.d("MainViewModel", "MainViewModel created")
@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
     fun getAmigosList() {
         viewModelScope.launch {
             try {
-                val response = Model.RetrofitClient.api.getAmigos()
+                val response = RetrofitClient.api.getAmigos()
 
                 if (!response.isSuccessful) {
                     Log.e("MainViewModel", "Error en la respuesta: ${response.code()}")
@@ -30,11 +30,11 @@ class MainViewModel : ViewModel() {
                     return@launch
                 }
 
-                 Log.d("MainViewModel", "Amigos: $amigosList")
+                Log.d("MainViewModel", "Amigos: $amigosList")
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Excepción al obtener amigos: ${e.message}")
             }
         }
-        }
     }
+}

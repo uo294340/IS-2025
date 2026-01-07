@@ -18,6 +18,7 @@ import org.osmdroid.views.MapView
 
 
 class MainActivity : AppCompatActivity() {
+    private val viewModel: MainViewModel by viewModels()
     private var map: MapView? = null // Referencia al objeto MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
