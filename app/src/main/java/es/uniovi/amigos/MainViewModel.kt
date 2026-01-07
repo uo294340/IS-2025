@@ -3,10 +3,14 @@ package es.uniovi.amigos
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    private var amigosList: List<Amigo>? = null
+    private val _amigosList = MutableLiveData<List<Amigo>>()
+
+    val amigosList: LiveData<List<Amigo>> = _amigosList
 
     init {
         Log.d("MainViewModel", "MainViewModel created")
@@ -22,7 +26,7 @@ class MainViewModel : ViewModel() {
                     return@launch
                 }
 
-                amigosList = response.body()
+                _amigosList.setValue(response.body())
 
                 // 3. Comprobar si la lista es nula
                 if (amigosList == null) {
@@ -30,7 +34,7 @@ class MainViewModel : ViewModel() {
                     return@launch
                 }
 
-                Log.d("MainViewModel", "Amigos: $amigosList")
+                Log.d("MainViewModel", "Amigos: ${amigosList. value}")
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Excepción al obtener amigos: ${e.message}")
