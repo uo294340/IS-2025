@@ -15,6 +15,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import androidx.core.content.ContextCompat
 
 
 
@@ -83,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             startMarker.position = coords
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
             startMarker. title = name
+            startMarker.icon = ContextCompat.getDrawable(this, R.drawable.outline_call_24)
             mapaNoNulo.overlays.add(startMarker)
         }
     }
