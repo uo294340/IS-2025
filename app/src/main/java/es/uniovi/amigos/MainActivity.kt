@@ -2,6 +2,8 @@ package es.uniovi.amigos
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +15,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 
+
+
 class MainActivity : AppCompatActivity() {
     private var map: MapView? = null // Referencia al objeto MapView
 
@@ -21,6 +25,8 @@ class MainActivity : AppCompatActivity() {
 
         // 1. Cargar el layout
         setContentView(R.layout.activity_main)
+
+        viewModel.getAmigosList()
 
         // 2. Leer la configuración de la aplicación e inicializar mapa
         // Esta es una operación de E/S en disco, para no bloquear el hilo GUI lo lanzamos
