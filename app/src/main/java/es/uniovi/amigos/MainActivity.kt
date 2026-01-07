@@ -14,6 +14,8 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+
 
 
 
@@ -50,6 +52,9 @@ class MainActivity : AppCompatActivity() {
 
             // Por ahora, solo verificamos que funciona:
             Log.d("MainActivity", "¡Observer notificado! Amigos: $listaDeAmigos")
+            if (listaDeAmigos != null) {
+                paintAmigosList(listaDeAmigos)
+            }
         }
     }
 
@@ -70,5 +75,23 @@ class MainActivity : AppCompatActivity() {
         mapController?.setZoom(5.5)
         val startPoint = GeoPoint(48.8583, 2.2944)
         mapController?.setCenter(startPoint)
+    }
+    private fun addMarker(latitud: Double, longitud: Double, name:  String?) {
+        map?.let { mapaNoNulo ->
+            val coords = GeoPoint(latitud, longitud)
+            val startMarker = Marker(mapaNoNulo)
+            startMarker.position = coords
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+            startMarker. title = name
+            mapaNoNulo.overlays.add(startMarker)
+        }
+    }
+
+    private fun paintAmigosList(amigos: List<Amigo>) {
+        for (amigo in amigos) {
+            addMarker(amigo.lati, amigo.longi, amigo. name)
+        }
+        // Forzar el repintado del mapa
+        map?.invalidate()
     }
 }

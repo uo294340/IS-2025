@@ -7,8 +7,8 @@ import retrofit2.http.GET
 
     data class Amigo(
         val name: String,
-        val latitude: Double,
-        val longitude: Double
+        val lati: Double,
+        val longi: Double
         )
     interface AmigosApiService {
         @GET("/api/amigos")
