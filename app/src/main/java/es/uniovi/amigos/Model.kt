@@ -9,6 +9,7 @@ import retrofit2.http.Path
 
 
 data class Amigo(
+    val id: Int,
         val name: String,
         val lati: Double,
         val longi: Double
@@ -28,6 +29,10 @@ data class LocationPayload(
         suspend fun updateAmigoPosition(
             @Path("id") amigoId: Int,
             @Body payload: LocationPayload
+        ): Response<Amigo>
+        @GET("api/amigo/byName/{name}")
+        suspend fun getAmigoByName(
+            @Path("name") name: String
         ): Response<Amigo>
     }
 
