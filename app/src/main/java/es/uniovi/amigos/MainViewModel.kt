@@ -32,6 +32,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     if (amigo != null) {
                         userId = amigo. id
                         Log.d("MainViewModel", "ID de usuario obtenido: $userId")
+                    try {
+                        val token = FirebaseMessaging.getInstance().token.await()
+
+
+                        Log.d("MainViewModel", "Usuario: $userName, Id: $userId, Token: $token")
+                        try {
+                            val devicePayload = DeviceTokenPayload(device = token)
+                            val updateResponse = RetrofitClient.api.updateAmigoDeviceToken(userId!!, devicePayload)
+
+                            if (updateResponse.isSuccessful) {
+                                Log.d("MainViewModel", "Token FCM enviado al servidor correctamente")
+                            } else {
+                                Log.e("MainViewModel", "Error al enviar token:  ${updateResponse.code()}")
+                            }
+                        } catch (e: Exception) {
+                            Log.e("MainViewModel", "Excepción al enviar token: ${e.message}")
+                        }
+
+
+                    } catch (e: Exception) {
+                            Log.e("MainViewModel", "Error al obtener token FCM: ${e.message}")
+                        }
                     } else {
                         Log.e("MainViewModel", "El cuerpo de la respuesta es nulo")
                     }
@@ -115,6 +137,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     Log.e("GPS", "Permiso de ubicación denegado.")
                     // Esto no debería pasar si la Activity lo hizo bien
                 }
+            }
+        }
+    }
+    fun obtenerYEnviarToken() {
+        viewModelScope.launch {
+            try {
+                // Obtener el token de Firebase
+                val token = FirebaseMessaging.getInstance().token.await()
+                Log.d("FCM", "Token obtenido: $token")
+
+
+                // enviarTokenAlServidor(token)
+
+            } catch (e: Exception) {
+                Log.e("FCM", "Error al obtener token: ${e.message}")
             }
         }
     }

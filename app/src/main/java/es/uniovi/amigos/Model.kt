@@ -14,7 +14,9 @@ data class Amigo(
         val lati: Double,
         val longi: Double
         )
-
+data class DeviceTokenPayload(
+    val device: String
+)
 data class LocationPayload(
     val lati: Double,
     val longi: Double
@@ -33,6 +35,12 @@ data class LocationPayload(
         @GET("api/amigo/byName/{name}")
         suspend fun getAmigoByName(
             @Path("name") name: String
+        ): Response<Amigo>
+
+        @PUT("api/amigo/{id}")
+        suspend fun updateAmigoDeviceToken(
+            @Path("id") amigoId: Int,
+            @Body payload: DeviceTokenPayload
         ): Response<Amigo>
     }
 
