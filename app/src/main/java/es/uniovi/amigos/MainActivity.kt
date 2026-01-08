@@ -19,6 +19,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import androidx.core.content.ContextCompat
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 
 
 
@@ -97,6 +99,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         checkAndRequestLocationPermissions()
+        askUserName()
     }
 
     override fun onResume() {
@@ -136,5 +139,34 @@ class MainActivity : AppCompatActivity() {
         }
         // Forzar el repintado del mapa
         map?.invalidate()
+    }
+
+    private fun askUserName() {
+
+        if (viewModel.userId != null) {
+            Log.d("MainActivity", "Ya tenemos userId:  ${viewModel.userId}, no pedimos nombre")
+            return
+        }
+        // 1. Crear el constructor del diálogo
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Identificación")
+        builder.setMessage("Introduce tu nombre de usuario:")
+
+        // 2. Crear un EditText para que el usuario escriba
+        val input = EditText(this)
+        builder.setView(input)
+
+        // 3. Configurar el botón "OK"
+        builder. setPositiveButton("Aceptar") { dialog, which ->
+            val name = input.text. toString()
+            // 4. ¡LA CONEXIÓN CLAVE!
+            // Si el usuario escribió un nombre, se lo pasamos al ViewModel
+            if (name.isNotBlank()) {
+                viewModel.setUserName(name)
+            }
+        }
+
+        // 5. Mostrar el diálogo
+        builder.show()
     }
 }

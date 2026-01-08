@@ -15,6 +15,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _amigosList = MutableLiveData<List<Amigo>>()
     private val locationFlow = application.createLocationFlow()
     val amigosList: LiveData<List<Amigo>> = _amigosList
+    private var userName: String? = null
+    var userId: Int? = null
+
+    fun setUserName(name: String) {
+        userName = name
+        Log. d("MainViewModel", "Nombre de usuario establecido: $userName")
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.api.getAmigoByName(name)
+
+                if (response.isSuccessful) {
+                    val amigo = response.body()
+                    if (amigo != null) {
+                        userId = amigo. id
+                        Log.d("MainViewModel", "ID de usuario obtenido: $userId")
+                    } else {
+                        Log.e("MainViewModel", "El cuerpo de la respuesta es nulo")
+                    }
+                } else {
+                    Log.e("MainViewModel", "Error al obtener usuario: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Excepción al obtener usuario: ${e.message}")
+            }
+        }
+    }
 
     init {
         Log.d("MainViewModel", "MainViewModel created")
