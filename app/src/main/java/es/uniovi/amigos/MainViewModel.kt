@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -45,7 +47,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         Log.d("MainViewModel", "MainViewModel created")
         startPolling() // Empezamos el polling
-        startLocationUpdates()
+
     }
 
     fun getAmigosList() {
