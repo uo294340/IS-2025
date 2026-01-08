@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
                 // Permiso concedido
                 Log.d("Permissions", "Permiso de GPS CONCEDIDO")
+                viewModel.startLocationUpdates()
             } else {
                 // Permiso denegado
                 Log.d("Permissions", "Permiso de GPS DENEGADO")
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
         ) {
             Log.d("Permissions", "Permisos ya concedidos. Iniciando GPS.")
+            viewModel.startLocationUpdates()
         } else {
             // Si no los tenemos, lanzamos el diálogo para pedirlos
             Log.d("Permissions", "No tenemos permisos. Solicitándolos...")
