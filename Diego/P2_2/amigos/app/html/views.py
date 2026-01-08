@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, abort
 from . import html
-from ..models import Amigo
-from .. import db
+from ..models import Amigo, get_all_devices
+from .. import db, fcm
 
 @html.route("/amigos")
 def tabla_amigos():
@@ -25,6 +25,10 @@ def delete_amigo(id):
     # Una vez obtenido, lo borramos
     db.session.delete(amigo)
     db.session.commit()
+
+    # Enviar notificación FCM a todos los dispositivos
+    devices = get_all_devices()
+    fcm.notificar_amigos(devices, "Amigo borrado")
 
     # Y redireccionamos a la vista /amigos
     return redirect(url_for('html.tabla_amigos'))
@@ -67,6 +71,10 @@ def save_amigo():
         amigo = Amigo(name=name, lati=lati, longi=longi, device=device if device else None)
         db.session.add(amigo)
         db.session.commit()
+        
+        # Enviar notificación FCM a todos los dispositivos
+        devices = get_all_devices()
+        fcm.notificar_amigos(devices, "Nuevo amigo")
     else:
         # En este caso se trata de un amigo de la base de datos
         amigo = Amigo.query.get_or_404(int(id))
@@ -83,6 +91,13 @@ def save_amigo():
         device = request.form.get("device")
         if device is not None:
             amigo.device = device if device else None
+        # Una vez modificado, lo guardamos a la base de datos
+        db.session.commit()
+        
+        # Enviar notificación FCM si se actualizó la posición
+        if lati or longi:
+            devices = get_all_devices()
+            fcm.notificar_amigos(devices, "Amigo se mueve")
         # Una vez modificado, lo guardamos a la base de datos
         db.session.commit()
     # Redireccionamos hacia la tabla-lista de amigos

@@ -1,7 +1,8 @@
 from flask import request, abort, jsonify
 from .. import db
 from . import api
-from ..models import Amigo
+from ..models import Amigo, get_all_devices
+from .. import fcm
 
 @api.route("/amigo/<int:id>")
 def get_amigo(id):
@@ -76,6 +77,11 @@ def edit_amigo(id):
     # el commit a la base de datos para que se guarden las modificaciones
     if name or lati or longi or device is not None:
         db.session.commit()
+        
+        # Enviar notificación FCM a todos los dispositivos
+        devices = get_all_devices()
+        if lati or longi:
+            fcm.notificar_amigos(devices, "Amigo se mueve")
 
     # Y retornamos el JSON con los nuevos datos
     amigodict = {"id": amigo.id, "name": amigo.name,
@@ -93,6 +99,11 @@ def delete_amigo(id):
     # Lo eliminamos de la base de datos
     db.session.delete(amigo)
     db.session.commit()
+    
+    # Enviar notificación FCM a todos los dispositivos
+    devices = get_all_devices()
+    fcm.notificar_amigos(devices, "Amigo borrado")
+    
     # En este caso no hay nada que retornar, pero es habitual hacer que
     # el código de estado HTTP sea 204 "No content" en lugar de 200 "OK"
     return ('', 204)
@@ -133,6 +144,10 @@ def new_amigo():
     amigo = Amigo(name=name, lati=lati, longi=longi, device=device if device else None)
     db.session.add(amigo)
     db.session.commit()
+
+    # Enviar notificación FCM a todos los dispositivos
+    devices = get_all_devices()
+    fcm.notificar_amigos(devices, "Nuevo amigo")
 
     # Y retornamos el JSON con los datos del nuevo amigo
     amigodict = {"id": amigo.id, "name": amigo.name,
