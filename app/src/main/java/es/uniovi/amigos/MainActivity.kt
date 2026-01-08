@@ -1,9 +1,12 @@
 package es.uniovi.amigos
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +27,40 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private var map: MapView? = null // Referencia al objeto MapView
 
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            // Este bloque se ejecuta cuando el usuario responde al diálogo
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+                // Permiso concedido
+                Log.d("Permissions", "Permiso de GPS CONCEDIDO")
+            } else {
+                // Permiso denegado
+                Log.d("Permissions", "Permiso de GPS DENEGADO")
+                // (Opcional: Mostrar un Toast o un diálogo explicando por qué
+                // la función de GPS no funcionará)
+            }
+        }
+
+    private fun checkAndRequestLocationPermissions() {
+        val permissionsToRequest = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        // Comprueba si ya tenemos los permisos
+        if (permissionsToRequest.all
+            { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
+        ) {
+            Log.d("Permissions", "Permisos ya concedidos. Iniciando GPS.")
+        } else {
+            // Si no los tenemos, lanzamos el diálogo para pedirlos
+            Log.d("Permissions", "No tenemos permisos. Solicitándolos...")
+            requestPermissionLauncher.launch(permissionsToRequest)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                 paintAmigosList(listaDeAmigos)
             }
         }
+        checkAndRequestLocationPermissions()
     }
 
     override fun onResume() {
