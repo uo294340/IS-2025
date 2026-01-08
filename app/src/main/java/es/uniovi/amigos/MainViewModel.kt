@@ -90,21 +90,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (result is LocationResult.NewLocation) {
                     val location = result.location
                     Log. d("GPS", "Nueva ubicación:  ${location.latitude}, ${location. longitude}")
-                    try {
-                        val payload = LocationPayload(
-                            lati = location.latitude,
-                            longi = location.longitude
-                        )
-                        val response = RetrofitClient.api.updateAmigoPosition(2, payload)
+                    userId?.let { idNoNulo ->
+                        try {
+                            val payload = LocationPayload(
+                                lati = location.latitude,
+                                longi = location.longitude
+                            )
+                            val response = RetrofitClient.api.updateAmigoPosition(idNoNulo, payload)
 
-                        if (response.isSuccessful) {
-                            Log. d("GPS", "Ubicación actualizada en el servidor correctamente")
-                        } else {
-                            Log.e("GPS", "Error al actualizar ubicación: ${response.code()}")
+                            if (response.isSuccessful) {
+                                Log.d("GPS", "Ubicación actualizada en el servidor correctamente")
+                            } else {
+                                Log.e("GPS", "Error al actualizar ubicación: ${response.code()}")
+                            }
+                        } catch (e: Exception) {
+                            Log.e("GPS", "Excepción al actualizar ubicación: ${e.message}")
                         }
-                    } catch (e: Exception) {
-                        Log.e("GPS", "Excepción al actualizar ubicación: ${e.message}")
-                    }
+                    }?: Log.w("GPS", "userId es null, no se puede actualizar la posición")
                 } else if (result is LocationResult.ProviderDisabled) {
                     Log. w("GPS", "El proveedor de GPS está desactivado.")
                 } else if (result is LocationResult.PermissionDenied) {
