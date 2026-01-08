@@ -12,6 +12,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("FCM", "Mensaje recibido!")
 
         val intent = Intent("updateFromServer")
+        intent.setPackage(packageName)
         sendBroadcast(intent)
         Log.d("FCM", "Broadcast enviado:  updateFromServer")
     }

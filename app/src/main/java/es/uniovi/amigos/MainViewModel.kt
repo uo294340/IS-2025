@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
+//import kotlinx.coroutines.delay
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 
@@ -68,7 +68,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         Log.d("MainViewModel", "MainViewModel created")
-        startPolling() // Empezamos el polling
+        //startPolling() // Empezamos el polling
 
     }
 
@@ -81,11 +81,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     Log.e("MainViewModel", "Error en la respuesta: ${response.code()}")
                     return@launch
                 }
-
-                _amigosList.setValue(response.body())
+                val amigos=response.body()
+                Log.d("MainViewModel", "Amigos recibidos: $amigos")
+                _amigosList.setValue(amigos)
 
                 // 3. Comprobar si la lista es nula
-                if (amigosList == null) {
+                if (amigos == null) {
                     Log.e("MainViewModel", "La lista de amigos recibida es nula")
                     return@launch
                 }
@@ -97,6 +98,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    /*
     private fun startPolling() {
         viewModelScope.launch {
             while (true) {
@@ -106,6 +108,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    */
+
     fun startLocationUpdates() {
         // Lanzamos una corutina para consumir asíncronamente del Flow
         viewModelScope. launch {

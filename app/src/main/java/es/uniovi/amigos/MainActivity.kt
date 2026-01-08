@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             if (intent?.action == "updateFromServer") {
                 Log.d("MainActivity", "¡Aviso de FCM recibido!  Hay que actualizar amigos...")
                 viewModel.getAmigosList()
+
             }
         }
     }
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         // 1. Cargar el layout
         setContentView(R.layout.activity_main)
 
-        //viewModel.getAmigosList()
+        viewModel.getAmigosList()
 
         // 2. Leer la configuración de la aplicación e inicializar mapa
         // Esta es una operación de E/S en disco, para no bloquear el hilo GUI lo lanzamos
