@@ -21,6 +21,9 @@ import org.osmdroid.views.overlay.Marker
 import androidx.core.content.ContextCompat
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content. Intent
+import android.content.IntentFilter
 
 
 
@@ -29,7 +32,15 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private var map: MapView? = null // Referencia al objeto MapView
 
-
+    private val updateReceiver = object :  BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            // Comprueba que es el aviso que nos interesa
+            if (intent?.action == "updateFromServer") {
+                Log.d("MainActivity", "¡Aviso de FCM recibido!  Hay que actualizar amigos...")
+                viewModel.getAmigosList()
+            }
+        }
+    }
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -105,11 +116,18 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         map?.onResume()
+
+        Log.d("MainActivity", "Registrando el receptor de avisos...")
+        val filter = IntentFilter("updateFromServer")
+        registerReceiver(updateReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onPause() {
         super.onPause()
         map?.onPause()
+
+        Log. d("MainActivity", "Desregistrando el receptor de avisos...")
+        unregisterReceiver(updateReceiver)
     }
 
     fun centrarMapaEnEuropa() {
