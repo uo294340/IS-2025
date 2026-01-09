@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil title="conejo Multicalidad">
+	<body>
+		<switch>
+			<video src="conejo_low.mp4">
+				<param name="videoBitrate" value="400000" valuetype="data"></param>
+			</video>
+			<video src="conejo_med.mp4">
+				<param name="videoBitrate" value="800000" valuetype="data"></param>
+			</video>
+			<video src="conejo_high.mp4">
+				<param name="videoBitrate" value="1200000" valuetype="data"></param>
+			</video>
+			<video src="conejo_hd.mp4">
+				<param name="videoBitrate" value="2500000" valuetype="data"></param>
+			</video>
+		</switch>
+	</body>
+</smil>
