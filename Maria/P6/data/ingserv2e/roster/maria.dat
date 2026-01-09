@@ -1,0 +1,18 @@
+return {
+	[false] = {
+		["version"] = 9;
+		["pending"] = {};
+	};
+	["diego@ingserv2e"] = {
+		["groups"] = {
+			["Buddies"] = true;
+		};
+		["subscription"] = "to";
+	};
+	["bot@ingserv2e"] = {
+		["groups"] = {
+			["Buddies"] = true;
+		};
+		["subscription"] = "both";
+	};
+};
