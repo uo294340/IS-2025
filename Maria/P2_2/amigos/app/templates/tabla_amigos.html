@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Amigos</title>
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%; 
+    }
+    table, th, td {
+        border: 1px solid black;
+        padding: 5pt;
+        text-align: center;
+    }
+    
+    .btn { padding: 5px; text-decoration: none; color: white; border-radius: 3px; }
+    .btn-edit { background-color: green; }
+    .btn-del { background-color: red; }
+    .btn-add { background-color: blue; }
+    </style>
+     
+</head>
+<body>
+    <div class="container">
+        <h1>Mis Amigos</h1>
+
+        <a href="/new_amigo" class="btn btn-add">Añadir Nuevo Amigo</a>
+        <br><br>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for amigo in amigos %}
+                <tr>
+                    <td>{{ amigo.nombre }}</td>
+                    <td>{{ amigo.lat }}</td>
+                    <td>{{ amigo.lon }}</td>
+                    <td>
+                        <a href="/edit_amigo/{{ amigo.id }}" class="btn btn-edit">Editar</a>
+                        <a href="/delete_amigo/{{ amigo.id }}" class="btn btn-del" onclick="return confirm('¿Seguro?')">Borrar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

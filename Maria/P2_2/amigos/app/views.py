@@ -8,10 +8,10 @@ def register_routes(app):
     @app.route('/amigos')
     def list_amigos():
         # Consulta a la base de datos (SELECT * FROM amigos)
-        lista_amigos = Amigo.query.all()
+        amigos = Amigo.query.all()
 
         # Renderizar el template pasando los datos
-        return render_template('amigos.html', amigos=lista_amigos)
+        return render_template('tabla_amigos.html', amigos=amigos)
 
     # Ruta raíz redirige a /amigos
     @app.route('/')

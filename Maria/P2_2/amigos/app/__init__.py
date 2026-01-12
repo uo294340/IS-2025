@@ -22,8 +22,8 @@ def create_app(config_name):
     register_routes(app)
     # ---------------------------
 
-    @app.route("/")
-    def prueba():
-        return "¡Hola Flask con MariaDB!"
+    #@app.route("/")
+    #def prueba():
+     #   return "¡Hola Flask con MariaDB!"
 
     return app
