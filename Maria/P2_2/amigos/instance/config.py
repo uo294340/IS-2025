@@ -1,3 +1,5 @@
-# Definición de secretos
-# Formato: mysql+pymysql://usuario:password@IP/base_de_datos
-SQLALCHEMY_DATABASE_URI = "mysql+pymysql://amigosuser:amigospass@172.18.0.2/amigosdb"
+# Definición de secretos a usar por la app
+import os
+
+# Leemos la URI de la variable de entorno, si no existe, usa sqlite (que fallará, pero es seguro)
+SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", "sqlite://")

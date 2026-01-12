@@ -1,4 +1,6 @@
 from app import create_app
+import os
 
-# Creamos la app en modo desarrollo
-app = create_app("development")
+
+modo = os.getenv("DEPLOYMENT_MODE", "production")
+app = create_app(modo)
