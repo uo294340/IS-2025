@@ -12,18 +12,14 @@ def create_app(config_name):
 
     db.init_app(app)
     
-    
-    # Inicializar la herramienta de migraciones vinculando app y db
+    # Inicializar migraciones
     Migrate(app, db)
     
-    # Importar los modelos para que SQLAlchemy sepa que existen
+    #Importar modelos para que Flask-Migrate los detecte
     from app import models 
-    from app.views import register_routes
-    register_routes(app)
-    # ---------------------------
-
-    #@app.route("/")
-    #def prueba():
-     #   return "¡Hola Flask con MariaDB!"
-
+    
+    # Registrar Blueprint HTML
+    from .html import html as html_blueprint
+    app.register_blueprint(html_blueprint, url_prefix='/html')
+    
     return app

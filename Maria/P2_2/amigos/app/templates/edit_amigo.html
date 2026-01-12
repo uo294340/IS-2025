@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Amigo - Modificar datos</title>
+</head>
+<body>
+    <h1>Datos del Amigo</h1>
+    <form action="/html/save_amigo" method="POST">
+        <input type="hidden" name="id" value="{{ amigo.id if amigo else '' }}"/>
+        
+        <label>Nombre:</label>
+        <input type="text" name="nombre" value="{{ amigo.nombre if amigo else '' }}" required><br><br>
+        
+        <label>Latitud:</label>
+        <input type="text" name="lat" value="{{ amigo.lat if amigo else '0' }}"><br><br>
+        
+        <label>Longitud:</label>
+        <input type="text" name="lon" value="{{ amigo.lon if amigo else '0' }}"><br><br>
+        
+        <input type="submit" value="Guardar">
+    </form>
+    <br>
+    <a href="/html/amigos">Cancelar</a>
+</body>
+</html>
