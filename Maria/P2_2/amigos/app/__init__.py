@@ -18,6 +18,8 @@ def create_app(config_name):
     
     # Importar los modelos para que SQLAlchemy sepa que existen
     from app import models 
+    from app.views import register_routes
+    register_routes(app)
     # ---------------------------
 
     @app.route("/")
