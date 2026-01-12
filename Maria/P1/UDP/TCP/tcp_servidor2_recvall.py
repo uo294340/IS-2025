@@ -1,47 +1,54 @@
-import sys
 import socket
-# Creación del socket de escucha
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
-# Podríamos haber omitido los parámetros, pues por defecto `socket()` en python
-# crea un socket de tipo TCP
+import sys
+import time
+
+PORT = 9999
+if len(sys.argv) > 1:
+    PORT = int(sys.argv[1])
 
 
+def recvall(sock, n):
+    """
+    Lee exactamente n bytes del socket, o devuelve None si se cierra.
+    """
+    datos = b''
+    while len(datos) < n:
+        # Intentamos leer lo que nos falta (n - lo que ya tenemos)
+        paquete = sock.recv(n - len(datos))
+        if not paquete:
+            return None
+        datos += paquete
+    return datos
 
-#El puerto en que debe escuchar lo recibirá por línea de comandos o usará un valor por defecto de 9999 si no se especifica
-if len(sys.argv) > 2:
-    print("Uso: python tcp_servidor1_simple.py <puerto>")
-    sys.exit(1)
-elif len(sys.argv) == 1:
-    puerto = 9999;  # Puerto por defecto
-else:
-    puerto = int(sys.argv[1])
 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(("", PORT))
+s.listen(5)
 
-# Asignarle puerto
-s.bind(("", puerto))
+print(f"Servidor TCP (recvall) esperando en puerto {PORT}...")
 
-# Ponerlo en modo pasivo
-s.listen(5)  # Máximo de clientes en la cola de espera al accept()
-
-# Bucle principal de espera por clientes
-while True: #aceptar clientes
-    print("Esperando un cliente")
+while True:
     sd, origen = s.accept()
-    print("Nuevo cliente conectado desde %s, %d" % origen)
+    print("Cliente aceptado. Pausa dramática de 1s...")
+    import time
+    time.sleep(1)
+    print(f"--> Conexión de: {origen}")
+
     continuar = True
-    # Bucle de atención al cliente conectado
-    while continuar: #atender cliente
-        datos = sd.recv(80)  # Observar que se lee del socket sd, no de s
+    while continuar:
+        # Usamos recvall en lugar de recv
+        datos_bytes = recvall(sd, 5)
         
-        if datos=="":  # Si no se reciben datos, es que el cliente cerró el socket
-            print("Conexión cerrada de forma inesperada por el cliente")
+        if not datos_bytes:
+            print("Conexión cerrada por el cliente.")
             sd.close()
-            continuar = False
-        elif datos=="FINAL":
-            print("Recibido mensaje de finalización")
+            break
+            
+        texto = datos_bytes.decode("utf-8")
+        
+        if texto == "FINAL":
+            print("Recibido FINAL. Cerrando con este cliente.")
             sd.close()
             continuar = False
         else:
-            print("Recibido mensaje: %s" % datos)
-            #mandar respuesta al cliente
-            sd.send(b"Recibido")
+            print(f"Recibido bloque completo: {texto}")
