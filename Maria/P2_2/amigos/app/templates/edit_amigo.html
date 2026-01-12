@@ -6,7 +6,9 @@
 </head>
 <body>
     <h1>Datos del Amigo</h1>
+    
     <form action="/html/save_amigo" method="POST">
+        
         <input type="hidden" name="id" value="{{ amigo.id if amigo else '' }}"/>
         
         <label>Nombre:</label>

@@ -25,7 +25,7 @@
     <div class="container">
         <h1>Mis Amigos</h1>
 
-        <a href="/new_amigo" class="btn btn-add">Añadir Nuevo Amigo</a>
+        <a href="/html/new_amigo" class="btn btn-add">Añadir Nuevo Amigo</a>
         <br><br>
 
         <table>
@@ -44,8 +44,8 @@
                     <td>{{ amigo.lat }}</td>
                     <td>{{ amigo.lon }}</td>
                     <td>
-                        <a href="/edit_amigo/{{ amigo.id }}" class="btn btn-edit">Editar</a>
-                        <a href="/delete_amigo/{{ amigo.id }}" class="btn btn-del" onclick="return confirm('¿Seguro?')">Borrar</a>
+                        <a href="/html/edit_amigo/{{ amigo.id }}" class="btn btn-edit">Editar</a>
+                        <a href="/html/delete_amigo/{{ amigo.id }}" class="btn btn-del" onclick="return confirm('¿Seguro?')">Borrar</a>
                     </td>
                 </tr>
                 {% endfor %}
