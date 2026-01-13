@@ -19,6 +19,9 @@
         
         <label>Longitud:</label>
         <input type="text" name="lon" value="{{ amigo.lon if amigo else '0' }}"><br><br>
+
+        <label>Dispositivo:</label>
+        <input type="text" name="device" value="{{ (amigo.device or '') if amigo else '' }}"><br><br>
         
         <input type="submit" value="Guardar">
     </form>
