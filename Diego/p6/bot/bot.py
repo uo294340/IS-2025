@@ -44,6 +44,8 @@ class MiBot(ClientXMPP):
             msg["to"] = jid_destino
             msg["type"] = "chat"
             msg["body"] = cuerpo
+
+            msg['chat_state'] = 'active' 
             msg.send()
 
     def callback_composing(self, evento):
