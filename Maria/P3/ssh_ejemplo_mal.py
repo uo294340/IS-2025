@@ -1,7 +1,7 @@
 import paramiko
 import time
 client = paramiko.SSHClient()
-client.connect('localhost', username='alumno', password='clave-mal')
+client.connect('localhost', username='uo294340', password='clave-mal')
 print("Conectado!!")
 
 # Ejecutar comando remoto, redireccionando sus salidas
