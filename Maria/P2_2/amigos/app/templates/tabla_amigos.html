@@ -34,7 +34,7 @@
                     <th>Nombre</th>
                     <th>Latitud</th>
                     <th>Longitud</th>
-                    <th>Acciones</th>
+                    <th>Dispositivo</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,6 +43,7 @@
                     <td>{{ amigo.nombre }}</td>
                     <td>{{ amigo.lat }}</td>
                     <td>{{ amigo.lon }}</td>
+                    <td>{{ amigo.device }}</td>
                     <td>
                         <a href="/html/edit_amigo/{{ amigo.id }}" class="btn btn-edit">Editar</a>
                         <a href="/html/delete_amigo/{{ amigo.id }}" class="btn btn-del" onclick="return confirm('¿Seguro?')">Borrar</a>

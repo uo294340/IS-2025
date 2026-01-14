@@ -10,7 +10,8 @@ def amigo_to_dict(amigo):
         'id': amigo.id,
         'name': amigo.nombre,   # Mapeamos nombre -> name
         'lati': amigo.lat,      # Mapeamos lat -> lati
-        'longi': amigo.lon      # Mapeamos lon -> longi
+        'longi': amigo.lon,      # Mapeamos lon -> longi
+        'device': amigo.device if amigo.device else ""
     }
 
 
@@ -55,9 +56,10 @@ def new_amigo():
         
     lati = request.json.get("lati", 0)
     longi = request.json.get("longi", 0)
+    device = request.json.get("device", "")
     
    
-    amigo = Amigo(nombre=name, lat=lati, lon=longi)
+    amigo = Amigo(nombre=name, lat=lati, lon=longi, device=device)
     db.session.add(amigo)
     db.session.commit()
     
@@ -74,6 +76,7 @@ def edit_amigo(id):
     name = request.json.get("name")
     lati = request.json.get("lati")
     longi = request.json.get("longi")
+    device = request.json.get("device")
     
     if name:
         amigo.nombre = name
@@ -81,9 +84,22 @@ def edit_amigo(id):
         amigo.lat = lati
     if longi:
         amigo.lon = longi
+    if device is not None:
+        amigo.device = device
         
     db.session.commit()
     return jsonify(amigo_to_dict(amigo))
+
+@api.route("/devices")
+def list_devices():
+    """Retorna lista de devices no nulos ni vacíos"""
+    # Filtramos: No nulos Y No vacíos
+    amigos = Amigo.query.filter(Amigo.device.isnot(None), Amigo.device != "").all()
+    
+    #lista solo con las cadenas de texto
+    devices_list = [a.device for a in amigos]
+    
+    return jsonify(devices_list)
 
 @api.route("/amigo/<int:id>", methods=["DELETE"])
 def delete_amigo(id):

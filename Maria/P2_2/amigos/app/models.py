@@ -10,6 +10,7 @@ class Amigo(db.Model):
     nombre = db.Column(db.String(60))
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
+    device = db.Column(db.Text)
 
     def __repr__(self):
         return f'<Amigo: {self.nombre}>'

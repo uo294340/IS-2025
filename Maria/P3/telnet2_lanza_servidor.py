@@ -20,9 +20,13 @@ tn.read_until(b"$")
 tn.write(b"cd IS-2025/Maria/P3\n")
 tn.read_until(b"$")
 #procesos del usuario
-tn.write(b"ps -ef | grep udp_servidor3_con_ok.py\n")
+tn.write(b"ps -ef | grep udp_servidor3_con_ok.py | grep -v grep\n")
 ps_output = tn.read_until(b"$").decode('utf-8')
-if "udp_servidor3_con_ok.py" in ps_output:
+
+
+
+
+if "python3 udp_servidor3_con_ok.py" in ps_output:
     print("El servidor ya está en ejecución")
 else:
     (print("Iniciando el servidor UDP..."))

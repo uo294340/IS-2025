@@ -43,13 +43,14 @@ def save_amigo():
     nombre = request.form.get("nombre")
     lat = request.form.get("lat", "0")
     lon = request.form.get("lon", "0")
+    device = request.form.get("device", "")
 
     if not nombre:
         abort(422) # Nombre obligatorio
 
     if not id:
         # Crear nuevo
-        amigo = Amigo(nombre=nombre, lat=lat, lon=lon)
+        amigo = Amigo(nombre=nombre, lat=lat, lon=lon, device=device)
         db.session.add(amigo)
     else:
         # Editar existente
@@ -57,6 +58,7 @@ def save_amigo():
         amigo.nombre = nombre
         amigo.lat = lat
         amigo.lon = lon
+        amigo.device = device
 
     db.session.commit()
     return redirect(url_for("html.tabla_amigos"))
