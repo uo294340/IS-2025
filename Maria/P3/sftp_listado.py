@@ -1,55 +1,37 @@
 import paramiko
-import getpass  # Para pedir la contraseña de forma segura
-import sys
+import base64
+import getpass
 
-# --- Configura tus datos de conexión ---
-HOST_IP = '192.168.0.30'  # REEMPLAZA con la IP de tu Ubuntu
-USUARIO = 'uo294340'
-# --------------------------------------
+# Configuración
+HOST = 'localhost'
+USER = 'uo294340' # TU USUARIO
 
-# Pedimos la contraseña de forma segura en lugar de escribirla en el código
-try:
-    PASSWORD = getpass.getpass(f"Introduce la contraseña para {USUARIO}@{HOST_IP}: ")
-except Exception as e:
-    print(f"Error al leer la contraseña: {e}")
-    sys.exit(1)
+HOST_KEY_STR = 'AAAAC3NzaC1lZDI1NTE5AAAAINWq1hnIayN4DLxzX7jai3iwztiq1oSPj05bg/nAf/JX'
 
-# 1. Crear el objeto SSHClient
-client = paramiko.SSHClient()
-
-# 2. Fijar la política para claves de host desconocidas
-# Usamos AutoAddPolicy para que acepte automáticamente la clave del servidor.
-# Esto es cómodo para ejercicios, pero inseguro en producción (como se vio en el Ej. 8)
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+password = getpass.getpass("Contraseña: ")
 
 try:
-    # 3. Conectar al servidor SSH
-    print(f"Conectando a {HOST_IP} como {USUARIO}...")
-    client.connect(HOST_IP, username=USUARIO, password=PASSWORD)
-    print("¡Conexión SSH exitosa!")
-
-    # 4. Abrir un canal SFTP sobre la conexión SSH
+    # 1. Conexión SSH
+    client = paramiko.SSHClient()
+    key = paramiko.Ed25519Key(data=base64.b64decode(HOST_KEY_STR))
+    client.get_host_keys().add(HOST, 'ssh-ed25519', key)
+    
+    client.connect(HOST, username=USER, password=password)
+    
+    # 2. Abrir canal SFTP
     sftp = client.open_sftp()
-    print("Canal SFTP abierto.")
+    
+    print(f"--- Listado de /home/{USER} ---")
+    
+    # Listar directorio actual (por defecto es el home)
+    archivos = sftp.listdir()
+    for archivo in archivos:
+        # Obtenemos detalles para mostrarlo bonito 
+        attr = sftp.stat(archivo)
+        print(f"{archivo:<20} | {attr.st_size:>8} bytes")
 
-    # 5. Usar los métodos de SFTP
-    # listdir() sin argumentos lista el contenido del directorio 'home' por defecto
-    lista_archivos = sftp.listdir()
-
-    print(f"\n--- Contenido de /home/{USUARIO} ---")
-    for nombre_fichero in lista_archivos:
-        print(nombre_fichero)
-    print("-----------------------------------")
-
-    # Cerramos el canal sftp
     sftp.close()
-
-except paramiko.AuthenticationException:
-    print("Error: Autenticación fallida. Revisa la contraseña.")
-except Exception as e:
-    print(f"Ocurrió un error inesperado: {e}")
-
-finally:
-    # 6. Cerrar siempre la conexión SSH principal
     client.close()
-    print("Conexión SSH cerrada.")
+
+except Exception as e:
+    print(f"Error: {e}")

@@ -1,76 +1,50 @@
 import paramiko
+import base64
 import getpass
-import sys
-import os      # Para crear la carpeta local
-import stat    # Para usar S_ISDIR y comprobar si es un directorio
+import os
+from stat import S_ISDIR
 
-# --- Configura tus datos de conexión ---
-HOST_IP = '192.168.0.30'  # REEMPLAZA con la IP de tu Ubuntu
-USUARIO = 'uo294340'
-CARPETA_REMOTA = '.'  # '.' significa el directorio 'home'
-CARPETA_LOCAL = 'mi_descarga_sftp' # Nombre de la carpeta donde guardaremos todo
-# --------------------------------------
+HOST = 'localhost'
+USER = 'uo294340'
+HOST_KEY_STR = 'AAAAC3NzaC1lZDI1NTE5AAAAINWq1hnIayN4DLxzX7jai3iwztiq1oSPj05bg/nAf/JX'
+CARPETA_REMOTA = '.'  # El home
+CARPETA_LOCAL = 'descargas_sftp'
 
-# 1. Crear la carpeta local si no existe
+password = getpass.getpass("Contraseña: ")
+
 if not os.path.exists(CARPETA_LOCAL):
     os.makedirs(CARPETA_LOCAL)
-    print(f"Carpeta local '{CARPETA_LOCAL}' creada.")
-
-# Pedimos la contraseña
-try:
-    PASSWORD = getpass.getpass(f"Introduce la contraseña para {USUARIO}@{HOST_IP}: ")
-except Exception as e:
-    print(f"Error al leer la contraseña: {e}")
-    sys.exit(1)
-
-# 2. Conectar (igual que en el ejercicio 12)
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 try:
-    print(f"Conectando a {HOST_IP} como {USUARIO}...")
-    client.connect(HOST_IP, username=USUARIO, password=PASSWORD)
-    print("¡Conexión SSH exitosa!")
-
+    client = paramiko.SSHClient()
+    key = paramiko.Ed25519Key(data=base64.b64decode(HOST_KEY_STR))
+    client.get_host_keys().add(HOST, 'ssh-ed25519', key)
+    
+    client.connect(HOST, username=USER, password=password)
     sftp = client.open_sftp()
-    print(f"Abierto canal SFTP. Accediendo a carpeta remota: '{CARPETA_REMOTA}'")
-
-    # 3. Cambiar al directorio remoto deseado
-    sftp.chdir(CARPETA_REMOTA)
-
-    # 4. Listar el contenido del directorio actual
-    # sftp.listdir('.') lista el directorio actual de sftp
-    items = sftp.listdir('.')
-
-    print(f"Iniciando descarga de archivos a '{CARPETA_LOCAL}'...")
-
-    # 5. Recorrer la lista y descargar SÓLO los ficheros
-    for item in items:
-        # Obtenemos los 'stats' del item para saber qué es
-        info = sftp.stat(item)
-
-        # Usamos la función S_ISDIR 
-        if stat.S_ISDIR(info.st_mode):
-            # Si es un directorio, lo omitimos
-            print(f"-> Omitiendo directorio: {item}")
+    
+    print(f"Descargando ficheros de {CARPETA_REMOTA} a {CARPETA_LOCAL}...")
+    
+    # Obtenemos lista de nombres
+    nombres = sftp.listdir(CARPETA_REMOTA)
+    
+    for nombre in nombres:
+        # Construimos la ruta completa remota
+        ruta_remota = nombre 
+        # Obtenemos atributos para ver si es directorio
+        atributos = sftp.stat(ruta_remota)
+        
+        if S_ISDIR(atributos.st_mode):
+            print(f"[OMITIDO] {nombre} es un directorio")
         else:
-            # Si es un fichero, lo descargamos
-            print(f"-> Descargando fichero:  {item}")
-            
-            # Construimos la ruta local completa
-            ruta_local_fichero = os.path.join(CARPETA_LOCAL, item)
-            
-            # Usamos sftp.get(fichero_remoto, fichero_local)
-            sftp.get(item, ruta_local_fichero)
+            print(f"[DESCARGANDO] {nombre}...", end=" ")
+            ruta_local = os.path.join(CARPETA_LOCAL, nombre)
+            sftp.get(ruta_remota, ruta_local)
+            print("OK")
 
-    print("\n¡Descarga completada!")
     sftp.close()
-
-except paramiko.AuthenticationException:
-    print("Error: Autenticación fallida. Revisa la contraseña.")
-except Exception as e:
-    print(f"Ocurrió un error inesperado: {e}")
-
-finally:
     client.close()
-    print("Conexión SSH cerrada.")
+    print("Proceso terminado.")
+
+except Exception as e:
+    print(f"Error: {e}")
